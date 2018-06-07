@@ -29,7 +29,7 @@ public GetDataSetIterator(int batchSize){
     this.batchSize = batchSize;
 }
 
-public GetDataSetIterator(){}
+
 
 
 

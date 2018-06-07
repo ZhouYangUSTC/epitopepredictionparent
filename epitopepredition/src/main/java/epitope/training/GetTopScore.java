@@ -2,9 +2,6 @@ package epitope.training;
 
 import epitope.dataprocessing.GetDataSetIterator;
 import epitope.dataprocessing.HLAProperty;
-import org.apache.commons.math3.exception.OutOfRangeException;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.DataSet;
 
 import java.io.IOException;
 import java.util.*;
@@ -14,10 +11,12 @@ class OutOfArayRangeException extends Exception{
         super(message);
     }
 }
+
 public class GetTopScore {
     double threshold ;
-    List<HLAProperty> list;
+    List<HLAProperty> propertyList;
     double[] prediction ;
+    double[] output;
     int k ;
 
     public GetTopScore(double threshold)
@@ -27,24 +26,26 @@ public class GetTopScore {
 
     public GetTopScore(GetDataSetIterator dataSet,double[] output,int k){
 
-        this.list = dataSet.dataList;
+        this.propertyList = dataSet.dataList;
         this.prediction = output;
+        this.output = output.clone();
+
         this.k = k;
 
     }
 
 
 
-    public static Integer[] getTopXIndex(double[] output,int k) throws OutOfArayRangeException{
+    public  Integer[] getTopXIndex() throws OutOfArayRangeException{
 
-        if(output.length<= k){
+        if(prediction.length<= k){
             throw new OutOfArayRangeException("K值超出预测输出长度范围");
         }
         Integer[] index = new Integer[k];
         HashMap<Double,Integer> map = new HashMap();
-        for (int i = 0; i < output.length; i++) {
+        for (int i = 0; i < prediction.length; i++) {
             try{
-                map.put(output[i], i); // 将值和下标存入Map
+                map.put(prediction[i], i); // 将值和下标存入Map
             }catch (Exception ex){
                 continue;
             }
@@ -52,68 +53,90 @@ public class GetTopScore {
         }
 
         // 排列
-        List list = new ArrayList();
-        Arrays.sort(output); // 升序排列
-        for (int i = 0; i < output.length; i++) {
-            list.add(output[i]);
+        List indexList = new ArrayList();
+        Arrays.sort(prediction); // 升序排列
+        for (int i = 0; i < prediction.length; i++) {
+            indexList.add(prediction[i]);
         }
-        Collections.reverse(list);
+        Collections.reverse(indexList);
 
 
 
         // 查找原始下标
         for (int i = 0; i < k; i++) {
-            index[i] = map.get((Double)list.get(i));
+            index[i] = map.get((Double)indexList.get(i));
         }
         return index;
     }
     /*
     * 根据获取到的下标，在list中找到相应序列
     * */
-    public static void getTopX(GetDataSetIterator dataSetIterator,Integer[] index)throws OutOfArayRangeException{
-        List<HLAProperty> list = dataSetIterator.dataList;
+    public List<String> getTopXSeq(Integer[] index)throws OutOfArayRangeException{
+
+        List<String> seqList = new ArrayList<>();
         for (int i = 0; i < index.length; i++) {
+            String seq = propertyList.get(index[i]).getSequence();
+            seqList.add(seq);
 
         }
+        return seqList;
     }
-    public static DataSet getTopXDataSet(GetDataSetIterator getDataSetIterator, INDArray output, int x)
+    /*
+    * 通过调用getTopXIndex（）和getTopX（）返回前k个序列和预测值
+    * */
+    public void getTopX ()throws OutOfArayRangeException{
+        Integer[] index = getTopXIndex();
+        List<String> seqList = getTopXSeq(index);
+
+
+        for (int i = 0; i < index.length; i++) {
+            System.out.println(seqList.get(i)+" "+output[index[i]]);
+
+        }
+
+    }
+   /* public static DataSet getTopXDataSet(GetDataSetIterator getDataSetIterator, INDArray output, int x)
     {
-        List<HLAProperty> list = new ArrayList();
+        List<HLAProperty> propertyList = new ArrayList();
         for (int i = 0; i < output.length(); i++) {
             if(output.getDouble(i)>= x){
-                list.add(getDataSetIterator.dataList.get(i));
+                propertyList.add(getDataSetIterator.dataList.get(i));
             }
         }
         GetDataSetIterator dataSet = new GetDataSetIterator();
-        return dataSet.getAllDataSet(list);
+        return dataSet.getAllDataSet(propertyList);
     }
 
     public static DataSet highScoreInPrediction(GetDataSetIterator test, INDArray output,double threshold)
     {
-        List<HLAProperty> list = new ArrayList();
+        List<HLAProperty> propertyList = new ArrayList();
         for (int i = 0; i < output.length(); i++) {
             if(output.getDouble(i)>= threshold && Double.valueOf(test.getLabels().get(i)) >= threshold){
-                list.add(test.dataList.get(i));
+                propertyList.add(test.dataList.get(i));
             }
         }
         GetDataSetIterator dataSet = new GetDataSetIterator();
-        return dataSet.getAllDataSet(list);
-    }
+        return dataSet.getAllDataSet(propertyList);
+    }*/
 
-    public static void main(String[] agrs){
+    /*public static void main(String[] agrs){
         GetDataSetIterator testingdataIterator = new GetDataSetIterator(100,"SQLT");
         try{
-            testingdataIterator.readDataFromFile("G:\\表位预测\\数据\\9000\\test1.txt");
+            testingdataIterator.readDataFromFile("E:\\抗原预测\\表位预测\\数据\\9000加属性\\datacopy\\test.txt");
 
 
         }catch(IOException ioEx){
             ioEx.getStackTrace();
+            System.out.println(ioEx);
         }
-        double[] a = {1.0,1,1,1,1};
-        GetTopScore getTopScore = new GetTopScore(testingdataIterator,a);
-        for (int i = 0; i < getTopScore.prediction.length; i++) {
+        double[] a = {1.0,0.2,0.5,0.9,0.8};
+        GetTopScore getTopScore = new GetTopScore(testingdataIterator,a,3);
+        try{
+            getTopScore.getTopX();
+        }catch(OutOfArayRangeException outRang)
+        {
+            outRang.getStackTrace();
+        }
 
-            System.out.println(getTopScore.prediction[i]+"  "+testingdataIterator.dataList.get(i).getNum());
-        }
-    }
+    }*/
 }
