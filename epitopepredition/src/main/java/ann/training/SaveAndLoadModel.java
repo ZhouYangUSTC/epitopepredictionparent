@@ -1,4 +1,4 @@
-package epitope.training;
+package ann.training;
 
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;

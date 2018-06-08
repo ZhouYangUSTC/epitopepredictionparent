@@ -1,4 +1,4 @@
-package epitope.pearson;
+package ann.pearson;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package epitope.pearson;
+package ann.pearson;
 
 /**
  * 计算两个样本数据之间的皮尔逊系数

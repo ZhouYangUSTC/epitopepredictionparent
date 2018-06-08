@@ -1,19 +1,16 @@
-package epitope;
+package ann;
 
 
-import epitope.dataprocessing.GetDataSetIterator;
-import epitope.pearson.DataNode;
-import epitope.pearson.PearsonCorrelationScore;
-import epitope.pearson.ScatterPlot;
-import epitope.training.SaveAndLoadModel;
-import epitope.training.TrainAndTest;
+import ann.dataprocessing.GetDataSetIterator;
+import ann.pearson.DataNode;
+import ann.pearson.PearsonCorrelationScore;
+import ann.pearson.ScatterPlot;
+import ann.training.SaveAndLoadModel;
+import ann.training.TrainAndTest;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.nd4j.linalg.api.ndarray.INDArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

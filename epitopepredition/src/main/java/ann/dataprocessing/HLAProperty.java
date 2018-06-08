@@ -1,4 +1,4 @@
-package epitope.dataprocessing;
+package ann.dataprocessing;
 
 public class HLAProperty {
     //定义属性

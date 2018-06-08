@@ -1,4 +1,4 @@
-package epitope.dataprocessing;
+package ann.dataprocessing;
 
 public class PropertyToVector {
     static double a = 1;

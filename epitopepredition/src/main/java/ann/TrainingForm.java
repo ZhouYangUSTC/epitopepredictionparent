@@ -1,4 +1,4 @@
-package epitope;
+package ann;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

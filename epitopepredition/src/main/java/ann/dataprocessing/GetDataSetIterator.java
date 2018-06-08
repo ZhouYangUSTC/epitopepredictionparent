@@ -1,4 +1,4 @@
-package epitope.dataprocessing;
+package ann.dataprocessing;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -42,16 +42,98 @@ public GetDataSetIterator(int batchSize){
     public List<HLAProperty> readDataFromFile(String fileName)
             throws IOException
     {
+        if(trainTypes.equals("SQ"))
+        {
+            dataList = new ArrayList<>();
+
+
+            FileInputStream fis = new FileInputStream(fileName);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis,"UTF-8"));
+            String line = in.readLine();
+            while(line != null)
+            {
+
+                String[] arry = line.split("\t");
+
+
+                //找到IC50的最大值，将其记录下来
+                double IC50 = Double.valueOf(arry[1]);
+                if(IC50> maxNum){
+                    maxNum = IC50;
+                }
+                HLAProperty hlaProperty = new HLAProperty();
+
+                char[] sequenceChar = arry[2].toCharArray();
+
+
+
+                double[] vector = PropertyToVector.sequenceToVector(sequenceChar);
+                hlaProperty.setSequence(arry[2]);
+                hlaProperty.setVector(vector);
+                hlaProperty.setLable(IC50);
+                dataList.add(hlaProperty);
+                line = in.readLine();
+            }
+            in.close();
+            fis.close();
+        }
+        else if(trainTypes.equals("SQL")){
+            dataList = new ArrayList<>();
+
+
+            FileInputStream fis = new FileInputStream(fileName);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis,"UTF-8"));
+            String line = in.readLine();
+
+            while(line != null)
+            {
+
+                String[] arry = line.split("\t");
+
+
+                //找到IC50的最大值，将其记录下来
+                double IC50 = Double.valueOf(arry[1]);
+                if(IC50> maxNum){
+                    maxNum = IC50;
+                }
+                HLAProperty hlaProperty = new HLAProperty();
+
+                char[] sequenceChar = arry[2].toCharArray();
+                double[] vector = PropertyToVector.sequenceToVector(sequenceChar);
+                hlaProperty.setSequence(arry[2]);
+                hlaProperty.setVector(vector);
+                hlaProperty.setLable(IC50);
+                //dataList.add(hlaProperty);
+                hlaProperty.setNum(Integer.valueOf(arry[0]));
+                hlaProperty.setAttribute_1(Double.valueOf(arry[3]));
+                hlaProperty.setAttribute_2(Double.valueOf(arry[4]));
+                hlaProperty.setAttribute_3(Double.valueOf(arry[5]));
+                hlaProperty.setAttribute_4(Double.valueOf(arry[6]));
+                hlaProperty.setAttribute_5(Double.valueOf(arry[7]));
+                hlaProperty.setAttribute_6(Double.valueOf(arry[8]));
+                hlaProperty.setAttribute_7(Double.valueOf(arry[9]));
+                hlaProperty.setAttribute_8(Double.valueOf(arry[10]));
+                hlaProperty.setAttribute_9(Double.valueOf(arry[11]));
+                dataList.add(hlaProperty);
+                line = in.readLine();
+            }
+            in.close();
+            fis.close();
+        } else if(trainTypes.equals("SQLT")){
+
         dataList = new ArrayList<>();
-
-
         FileInputStream fis = new FileInputStream(fileName);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(fis,"UTF-8"));
         String line = in.readLine();
+
         while(line != null)
         {
+
             String[] arry = line.split("\t");
+
 
             //找到IC50的最大值，将其记录下来
             double IC50 = Double.valueOf(arry[1]);
@@ -93,10 +175,12 @@ public GetDataSetIterator(int batchSize){
                 dataList.add(hlaProperty);
             line = in.readLine();
             }
+            in.close();
+            fis.close();
+        }
 
 
-        in.close();
-        fis.close();
+
 
         return dataList;
 
@@ -326,7 +410,7 @@ public GetDataSetIterator(int batchSize){
 
         //用序列训练
 
-        if(trainTypes.equals("seq")){
+        if(trainTypes.equals("SQ")){
             inArry = Nd4j.create(listSize, 180);
             outArry = Nd4j.zeros(listSize, 1);
             for (int i = 0; i < listSize; i++) {
@@ -342,7 +426,7 @@ public GetDataSetIterator(int batchSize){
 
         }
         //用属性训练
-        else if(trainTypes.equals("lenth")){
+        else if(trainTypes.equals("SQL")){
             inArry = Nd4j.create(listSize, 9);
             outArry = Nd4j.zeros(listSize, 1);
             for (int i = 0; i < listSize; i++) {
@@ -368,68 +452,9 @@ public GetDataSetIterator(int batchSize){
             }
 
         }
-        //序列加亲疏水性
-        else if(trainTypes.equals("sqt")) {
-            inArry = Nd4j.create(listSize, 189);
-            outArry = Nd4j.zeros(listSize, 1);
-            for (int i = 0; i < listSize; i++) {
 
-                double[] sequenceVt = dataList.get(i).getVector();
-                double[] arrtribute = new double[9];
-                HLAProperty hlaProperty = dataList.get(i);
-                arrtribute[0] = hlaProperty.getAttribute_10();
-                arrtribute[1] = hlaProperty.getAttribute_11();
-                arrtribute[2] = hlaProperty.getAttribute_12();
-                arrtribute[3] = hlaProperty.getAttribute_13();
-                arrtribute[4] = hlaProperty.getAttribute_14();
-                arrtribute[5] = hlaProperty.getAttribute_15();
-                arrtribute[6] = hlaProperty.getAttribute_16();
-                arrtribute[7] = hlaProperty.getAttribute_17();
-                arrtribute[8] = hlaProperty.getAttribute_18();
 
-                INDArray arry = Nd4j.create(arrtribute);
-                INDArray seq = Nd4j.create(sequenceVt);
-                INDArray inArryI = Nd4j.hstack(seq, arry);
-
-                inArry.putRow(i, inArryI);
-                //将label值进行归一化处理
-                double lable = 1 - Math.log(dataList.get(i).getLable()) / Math.log(maxNum);
-
-                outArry.putScalar(new int[]{i, 0}, lable);
-            }
-        }
-        //序列加属性
-        else if(trainTypes.equals("sql")){
-            inArry = Nd4j.create(listSize, 189);
-            outArry = Nd4j.zeros(listSize, 1);
-            for (int i = 0; i < listSize; i++) {
-
-                double[] sequenceVt = dataList.get(i).getVector();
-                double[] arrtribute = new double[9];
-                HLAProperty hlaProperty = dataList.get(i);
-                arrtribute[0] = hlaProperty.getAttribute_1();
-                arrtribute[1] = hlaProperty.getAttribute_2();
-                arrtribute[2] = hlaProperty.getAttribute_3();
-                arrtribute[3] = hlaProperty.getAttribute_4();
-                arrtribute[4] = hlaProperty.getAttribute_5();
-                arrtribute[5] = hlaProperty.getAttribute_6();
-                arrtribute[6] = hlaProperty.getAttribute_7();
-                arrtribute[7] = hlaProperty.getAttribute_8();
-                arrtribute[8] = hlaProperty.getAttribute_9();
-
-                INDArray arry = Nd4j.create(arrtribute);
-                INDArray seq = Nd4j.create(sequenceVt);
-                INDArray inArryI = Nd4j.hstack(seq,arry);
-
-                inArry.putRow(i, inArryI);
-                //将label值进行归一化处理
-                //double lable = 1 - Math.log(dataList.get(i).getLable()) / Math.log(maxNum);
-                double lable = dataList.get(i).getLable();
-                outArry.putScalar(new int[]{i, 0}, lable);
-            }
-
-        }
-        else if(trainTypes.equals("all")) {
+        else if(trainTypes.equals("SQLT")) {
             inArry = Nd4j.create(listSize, 198);
             outArry = Nd4j.zeros(listSize, 1);
             for (int i = 0; i < listSize; i++) {

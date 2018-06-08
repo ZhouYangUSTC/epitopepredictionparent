@@ -1,9 +1,8 @@
-package epitope.training;
+package ann.training;
 
-import epitope.dataprocessing.GetDataSetIterator;
-import epitope.dataprocessing.HLAProperty;
+import ann.dataprocessing.GetDataSetIterator;
+import ann.dataprocessing.HLAProperty;
 
-import java.io.IOException;
 import java.util.*;
 
 class OutOfArayRangeException extends Exception{

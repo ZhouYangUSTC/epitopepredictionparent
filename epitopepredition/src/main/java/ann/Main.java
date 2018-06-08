@@ -1,30 +1,19 @@
-package epitope;
+package ann;
 
 
-import epitope.dataprocessing.GetDataSetIterator;
-import epitope.pearson.DataNode;
-import epitope.pearson.PearsonCorrelationScore;
-import epitope.pearson.ScatterPlot;
-import epitope.training.CreateNeuralNet;
-import epitope.training.SaveAndLoadModel;
-import epitope.training.TrainAndTest;
-import org.deeplearning4j.api.storage.StatsStorage;
+import ann.dataprocessing.GetDataSetIterator;
+import ann.pearson.DataNode;
+import ann.pearson.PearsonCorrelationScore;
+import ann.pearson.ScatterPlot;
+import ann.training.CreateNeuralNet;
+import ann.training.SaveAndLoadModel;
+import ann.training.TrainAndTest;
 
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
-import org.deeplearning4j.ui.api.UIServer;
-import org.deeplearning4j.ui.stats.StatsListener;
-import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 

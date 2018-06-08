@@ -1,6 +1,6 @@
-package epitope.training;
+package ann.training;
 
-import epitope.dataprocessing.GetDataSetIterator;
+import ann.dataprocessing.GetDataSetIterator;
 import org.deeplearning4j.eval.RegressionEvaluation;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;

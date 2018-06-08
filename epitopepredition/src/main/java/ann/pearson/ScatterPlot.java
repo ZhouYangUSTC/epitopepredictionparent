@@ -1,8 +1,6 @@
-package epitope.pearson;
+package ann.pearson;
 
 
-import org.deeplearning4j.ui.components.chart.ChartScatter;
-import org.deeplearning4j.ui.components.chart.style.StyleChart;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartUtilities;
@@ -18,8 +16,6 @@ import org.jfree.data.xy.DefaultXYDataset;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ScatterPlot {
     private  double[][] data = new double[2][];
