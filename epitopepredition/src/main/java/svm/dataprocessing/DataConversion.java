@@ -2,6 +2,7 @@ package svm.dataprocessing;
 
 import ann.dataprocessing.HLAProperty;
 import ann.dataprocessing.PropertyToVector;
+import org.opencv.ml.SVM;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -20,8 +21,15 @@ public class DataConversion {
     }
 
 
-
-
+    public static void main(String[] args){
+        DataConversion svmDataCon = new DataConversion("SQLT",0.9);
+        try{
+            svmDataCon.readDataFromFile("E:\\抗原预测\\表位预测\\数据\\9000加属性\\datacopy\\train.txt");
+            svmDataCon.svm_data_file("E:\\svmtraindata1.txt");
+        }catch(IOException ex){
+            ex.getStackTrace();
+        }
+    }
 
 
     /*
@@ -172,19 +180,67 @@ public class DataConversion {
             svmDataString = new StringBuffer();
             int lable = (1-Math.log(dataList.get(i).getLable())/Math.log(maxNum)) >= k ?1:-1;
             svmDataString.append(lable+" ");
-            for (int j = 0; j < dataList.get(i).getVector().length; j++) {
+            int index = dataList.get(i).getVector().length;
+            for (int j = 0; j < index; j++) {
                 if(dataList.get(i).getVector()[j] ==1){
-                    svmDataString.append(j+":"+dataList.get(i).getVector()[j]+" ");
+                    svmDataString.append(j+1+":"+dataList.get(i).getVector()[j]+" ");
                 }
+            }
+            if(fileTypes.equals("SQL")){
+                svmDataString.append(index+1+":"+dataList.get(i).getAttribute_1()+" ");
+                svmDataString.append(index+2+":"+dataList.get(i).getAttribute_2()+" ");
+                svmDataString.append(index+3+":"+dataList.get(i).getAttribute_3()+" ");
+                svmDataString.append(index+4+":"+dataList.get(i).getAttribute_4()+" ");
+                svmDataString.append(index+5+":"+dataList.get(i).getAttribute_5()+" ");
+                svmDataString.append(index+6+":"+dataList.get(i).getAttribute_6()+" ");
+                svmDataString.append(index+7+":"+dataList.get(i).getAttribute_7()+" ");
+                svmDataString.append(index+8+":"+dataList.get(i).getAttribute_8()+" ");
+                svmDataString.append(index+9+":"+dataList.get(i).getAttribute_9());
+            }
+            else if(fileTypes.equals("SQLT")){
+                svmDataString.append(index+1+":"+dataList.get(i).getAttribute_1()+" ");
+                svmDataString.append(index+2+":"+dataList.get(i).getAttribute_2()+" ");
+                svmDataString.append(index+3+":"+dataList.get(i).getAttribute_3()+" ");
+                svmDataString.append(index+4+":"+dataList.get(i).getAttribute_4()+" ");
+                svmDataString.append(index+5+":"+dataList.get(i).getAttribute_5()+" ");
+                svmDataString.append(index+6+":"+dataList.get(i).getAttribute_6()+" ");
+                svmDataString.append(index+7+":"+dataList.get(i).getAttribute_7()+" ");
+                svmDataString.append(index+8+":"+dataList.get(i).getAttribute_8()+" ");
+                svmDataString.append(index+9+":"+dataList.get(i).getAttribute_9()+" ");
+                svmDataString.append(index+10+":"+dataList.get(i).getAttribute_10()+" ");
+                svmDataString.append(index+11+":"+dataList.get(i).getAttribute_11()+" ");
+                svmDataString.append(index+12+":"+dataList.get(i).getAttribute_12()+" ");
+                svmDataString.append(index+13+":"+dataList.get(i).getAttribute_13()+" ");
+                svmDataString.append(index+14+":"+dataList.get(i).getAttribute_14()+" ");
+                svmDataString.append(index+15+":"+dataList.get(i).getAttribute_15()+" ");
+                svmDataString.append(index+16+":"+dataList.get(i).getAttribute_16()+" ");
+                svmDataString.append(index+17+":"+dataList.get(i).getAttribute_17()+" ");
+                svmDataString.append(index+18+":"+dataList.get(i).getAttribute_18());
+
             }
 
             svmDataList.add(svmDataString.toString());
         }
         File file = new File(fileName);
-        //先写到本地，然后再用svmdataiterator读取。
-        for (int i = 0; i < svmDataList.size(); i++) {
-
+        if(!file.exists()){
+            file.createNewFile();
         }
+        FileWriter fw = new FileWriter(file);
+
+            //先写到本地，然后再用svmdataiterator读取。
+            for (int i = 0; i < svmDataList.size(); i++) {
+                if (i>svmDataList.size()-2){
+                    fw.write(svmDataList.get(i));
+
+                }else {
+                    fw.write(svmDataList.get(i));
+                    fw.write("\r\n");
+                }
+
+            }
+            fw.close();
+
+
     }
 
 }
