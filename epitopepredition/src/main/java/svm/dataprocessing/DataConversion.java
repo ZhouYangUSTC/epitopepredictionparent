@@ -2,9 +2,10 @@ package svm.dataprocessing;
 
 import ann.dataprocessing.HLAProperty;
 import ann.dataprocessing.PropertyToVector;
-import org.opencv.ml.SVM;
+
 
 import java.io.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class DataConversion {
             fis.close();
         } else if (fileTypes.equals("SQLT")) {
 
-            dataList = new ArrayList<>();
+            dataList = new ArrayList<HLAProperty>();
             FileInputStream fis = new FileInputStream(fileName);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(fis, "UTF-8"));

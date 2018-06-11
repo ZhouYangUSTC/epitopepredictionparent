@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>epitopepredition</module>
+        <module>SVMPrediction</module>
     </modules>
 
 
@@ -29,6 +30,7 @@
         <datavec.version>1.0.0-alpha</datavec.version>
         <arbiter.version>1.0.0-alpha</arbiter.version>
         <rl4j.version>1.0.0-alpha</rl4j.version>
+
 
         <!-- For Spark examples: change the _1 to _2 to switch between Spark 1 and Spark 2 -->
         <dl4j.spark.version>1.0.0-alpha_spark_1</dl4j.spark.version>

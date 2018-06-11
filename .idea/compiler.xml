@@ -12,6 +12,7 @@
     <bytecodeTargetLevel>
       <module name="deeplearning4j-epitopeprediction-parent" target="1.5" />
       <module name="epitopepredition" target="1.8" />
+      <module name="SVMPrediction" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
