@@ -1,4 +1,4 @@
-package svm.SVMPredict;
+package svm.svmpredict;
 
 import java.io.IOException;
 public class SVMPredict {
