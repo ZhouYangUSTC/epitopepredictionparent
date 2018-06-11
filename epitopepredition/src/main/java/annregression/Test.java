@@ -1,12 +1,12 @@
-package ann;
+package annregression;
 
 
-import ann.dataprocessing.GetDataSetIterator;
-import ann.pearson.DataNode;
-import ann.pearson.PearsonCorrelationScore;
-import ann.pearson.ScatterPlot;
-import ann.training.SaveAndLoadModel;
-import ann.training.TrainAndTest;
+import annregression.dataprocessing.GetDataSetIterator;
+import annregression.pearson.DataNode;
+import annregression.pearson.PearsonCorrelationScore;
+import annregression.pearson.ScatterPlot;
+import annregression.training.SaveAndLoadModel;
+import annregression.training.TrainAndTest;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

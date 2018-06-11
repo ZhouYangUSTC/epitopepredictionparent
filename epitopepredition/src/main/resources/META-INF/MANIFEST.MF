@@ -146,5 +146,5 @@ Class-Path: bin\gson-2.7.jar bin\jackson-xc-1.8.3.jar bin\javacpp-1.4.
  pture-2.11.3.121-1.4.1.jar bin\jcommander-1.27.jar bin\aeron-all-1.0.
  4.jar bin\leveldb-0.5.jar bin\mkl-2018.1-1.4.1-macosx-x86_64.jar bin\
  javacv-1.4.1.jar
-Main-Class: ann.TrainingForm
+Main-Class: annregression.TrainingForm
 

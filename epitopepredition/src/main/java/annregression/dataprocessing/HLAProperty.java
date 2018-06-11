@@ -1,4 +1,4 @@
-package ann.dataprocessing;
+package annregression.dataprocessing;
 
 public class HLAProperty {
     //定义属性

@@ -1,6 +1,6 @@
-package ann.training;
+package annregression.training;
 
-import ann.dataprocessing.GetDataSetIterator;
+import annregression.dataprocessing.GetDataSetIterator;
 import org.deeplearning4j.eval.RegressionEvaluation;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;

@@ -1,4 +1,4 @@
-package svm.dataprocessing.SVMPredict;
+package svm.SVMPredict;
 
 import libsvm.*;
 

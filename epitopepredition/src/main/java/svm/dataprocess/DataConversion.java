@@ -1,7 +1,7 @@
-package svm.dataprocessing;
+package svm.dataprocess;
 
-import ann.dataprocessing.HLAProperty;
-import ann.dataprocessing.PropertyToVector;
+import annregression.dataprocessing.HLAProperty;
+import annregression.dataprocessing.PropertyToVector;
 
 
 import java.io.*;

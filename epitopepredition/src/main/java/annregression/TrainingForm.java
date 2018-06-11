@@ -1,4 +1,4 @@
-package ann;
+package annregression;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -1,4 +1,4 @@
-package ann.dataprocessing;
+package annregression.dataprocessing;
 
 public class PropertyToVector {
     static double a = 1;

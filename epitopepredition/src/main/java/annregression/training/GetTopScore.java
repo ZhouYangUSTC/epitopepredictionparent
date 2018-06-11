@@ -1,7 +1,7 @@
-package ann.training;
+package annregression.training;
 
-import ann.dataprocessing.GetDataSetIterator;
-import ann.dataprocessing.HLAProperty;
+import annregression.dataprocessing.GetDataSetIterator;
+import annregression.dataprocessing.HLAProperty;
 
 import java.util.*;
 
