@@ -3,6 +3,7 @@ package annregression.training;
 import annregression.dataprocessing.GetDataSetIterator;
 import annregression.dataprocessing.HLAProperty;
 
+import java.io.IOException;
 import java.util.*;
 
 class OutOfArayRangeException extends Exception{
@@ -118,7 +119,7 @@ public class GetTopScore {
         return dataSet.getAllDataSet(propertyList);
     }*/
 
-    /*public static void main(String[] agrs){
+    public static void main(String[] agrs){
         GetDataSetIterator testingdataIterator = new GetDataSetIterator(100,"SQLT");
         try{
             testingdataIterator.readDataFromFile("E:\\抗原预测\\表位预测\\数据\\9000加属性\\datacopy\\test.txt");
@@ -137,5 +138,5 @@ public class GetTopScore {
             outRang.getStackTrace();
         }
 
-    }*/
+    }
 }

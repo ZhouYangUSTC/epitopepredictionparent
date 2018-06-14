@@ -1,4 +1,4 @@
-package svm.dataprocess;
+package svmclassification.dataprocess;
 
 import annregression.dataprocessing.HLAProperty;
 import annregression.dataprocessing.PropertyToVector;

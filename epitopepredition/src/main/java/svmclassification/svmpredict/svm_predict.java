@@ -1,4 +1,4 @@
-package svm.svmpredict;
+package svmclassification.svmpredict;
 
 import libsvm.*;
 

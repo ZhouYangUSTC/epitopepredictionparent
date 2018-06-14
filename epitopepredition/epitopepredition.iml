@@ -334,6 +334,6 @@
     <orderEntry type="library" name="Maven: com.typesafe.akka:akka-persistence-experimental_2.10:2.3.13" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-scala_2.10:2.4.4" level="project" />
     <orderEntry type="library" name="Maven: com.typesafe.akka:akka-cluster_2.10:2.3.13" level="project" />
-    <orderEntry type="library" exported="" name="Maven: tw.edu.ntu.csie:libsvm:3.17" level="project" />
+    <orderEntry type="library" name="Maven: tw.edu.ntu.csie:libsvm:3.17" level="project" />
   </component>
 </module>
