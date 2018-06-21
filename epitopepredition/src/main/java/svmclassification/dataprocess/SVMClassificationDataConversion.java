@@ -9,24 +9,24 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataConversion {
+public class SVMClassificationDataConversion {
     public List<HLAProperty> dataList;
     double maxNum = 0;
     double k;
     String fileTypes = "";
 
-    public DataConversion(String fileTypes,double k){
+    public SVMClassificationDataConversion(String fileTypes, double k){
 
         this.fileTypes = fileTypes;
         this.k = k;
     }
 
 
-    public static void main(String[] args){
-        DataConversion svmDataCon = new DataConversion("SQLT",0.9);
+    public static void main(){
+        SVMClassificationDataConversion svmDataCon = new SVMClassificationDataConversion("SQLT",0.9);
         try{
             svmDataCon.readDataFromFile("E:\\抗原预测\\表位预测\\数据\\9000加属性\\datacopy\\train.txt");
-            svmDataCon.svm_data_file("E:\\svmtraindata1.txt");
+            svmDataCon.svmDataFile("E:\\svmtraindata.txt");
         }catch(IOException ex){
             ex.getStackTrace();
         }
@@ -174,12 +174,12 @@ public class DataConversion {
 
         return dataList;
     }
-    public void svm_data_file(String fileName) throws IOException{
+    public void svmDataFile(String fileName) throws IOException{
         StringBuffer svmDataString;
         List<String> svmDataList = new ArrayList<>();
         for (int i = 0; i < dataList.size(); i++) {
             svmDataString = new StringBuffer();
-            int lable = (1-Math.log(dataList.get(i).getLable())/Math.log(maxNum)) >= k ?1:-1;
+            double lable = (1-Math.log(dataList.get(i).getLable())/Math.log(maxNum))>=k?1.0:-1.0;
             svmDataString.append(lable+" ");
             int index = dataList.get(i).getVector().length;
             for (int j = 0; j < index; j++) {

@@ -1,7 +1,7 @@
 package svmclassification.svmpredict;
 
 import java.io.IOException;
-public class SVMPredict {
+public class SVMClaPredict {
     public static void main(String[] args) throws IOException {
 
 
