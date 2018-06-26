@@ -19,7 +19,7 @@ public class GetDataSetIterator implements DataSetIterator {
     //
     static int flag = 0;
     double maxNum = 0;
-    String trainTypes = "";
+    String trainTypes;
 
 public GetDataSetIterator(int batchSize,String trainTypes){
     this.batchSize = batchSize;
@@ -382,10 +382,7 @@ public GetDataSetIterator(int batchSize){
                     outArry.putScalar(new int[]{i, 0}, lable);
                 }
             }
-            else{
 
-                return null;
-            }
 
 
 
@@ -493,10 +490,7 @@ public GetDataSetIterator(int batchSize){
                 outArry.putScalar(new int[]{i, 0}, lable);
             }
         }
-        else{
 
-            return null;
-        }
 
 
 

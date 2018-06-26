@@ -1,4 +1,4 @@
-package annregression.pearson;
+package annregression.estimate;
 
 /**
  * 计算两个样本数据之间的皮尔逊系数

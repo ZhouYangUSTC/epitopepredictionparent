@@ -1,4 +1,4 @@
-package annregression.pearson;
+package annregression.estimate;
 
 import java.util.Arrays;
 

@@ -2,27 +2,32 @@ package annregression;
 
 
 import annregression.dataprocessing.GetDataSetIterator;
-import annregression.pearson.DataNode;
-import annregression.pearson.PearsonCorrelationScore;
-import annregression.pearson.ScatterPlot;
 import annregression.training.CreateNeuralNet;
 import annregression.training.SaveAndLoadModel;
 import annregression.training.TrainAndTest;
-
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class Main {
+public class AnnMain {
 
 
-    //private static Logger log = LoggerFactory.getLogger(Main.class);
+    //private static Logger log = LoggerFactory.getLogger(AnnMain.class);
     public TrainAndTest trainAndTest;
     public Double pearsonScore;
+    public List<double[]> annRegList ;
+    public GetDataSetIterator trainingdataIterator;
+    public GetDataSetIterator testingdataIterator;
+    public String trainTypes;
+    public AnnMain(String trainTypes){
+        this.trainTypes = trainTypes;
+    }
+    public AnnMain(){
+
+    }
+
     public void SQSingleLayerModel(int epoch,double rate,int hiddenLayer1,List<String> pathList){
         int batchSize = 50;         // 批次大小
               // 训练次数
@@ -32,28 +37,22 @@ public class Main {
 
         double threshold = 0.8;
 
-        String trainTypes = "SQ";  // 训练内容：序列、侧链长度、两者结合
-
-        List<double[]> list = new ArrayList<>();
-
-
-
         /*
         * 获取训练集和测试集
         * */
         String traiFfileName = pathList.get(0);
         String testFileName = pathList.get(1);
-        GetDataSetIterator trainingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
-        GetDataSetIterator testingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
+        String fileType = "SQ";
+        trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+        testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
             testingdataIterator.readDataFromFile(testFileName);
 
+
         }catch(IOException ioEx){
-            ioEx.getStackTrace();
+            ioEx.getStackTrace();//文件最后不能有空行
         }
-
-
 
 
         //log.info("Build model....");
@@ -64,50 +63,29 @@ public class Main {
         //log.info("TrainAndTest model....");
 
 
-
-
-
-
-
         //使用k-折交叉验证训练模型
         trainAndTest = new TrainAndTest(threshold);
         trainAndTest.kFoldTrain(network1,trainingdataIterator,10,epoch);
         //测试
-        list =  trainAndTest.test(network1,testingdataIterator);
-
-
-
-
-
+        annRegList =  trainAndTest.test(network1,testingdataIterator);
 
 
         //保存和加载模型
 
         String fileName = String.valueOf(hiddenLayer1)+"_"+String.valueOf("0")+"_"+String.valueOf(epoch)+"_"+String.valueOf(rate);
 
-        String filePath  = pathList.get(2)+"\\"+fileName+".txt";
+        //String filePath  = pathList.get(2)+"\\"+fileName+".txt";
         try{
-            trainAndTest.writeToFile(testingdataIterator,list,filePath); //将预测结果和真实值写入文件
-            SaveAndLoadModel.saveModel(network1,pathList.get(3)+"\\"+fileName+".zip");
+            //trainAndTest.writeToFile(testingdataIterator,annRegList,filePath); //将预测结果和真实值写入文件
+            SaveAndLoadModel.saveModel(network1,pathList.get(2)+"\\"+fileName+".zip");
 
         }catch (IOException ex){
             ex.getStackTrace();
         }
 
-
-
         //计算皮尔逊相关系数
-        DataNode outPut = new DataNode(list.get(0));
-        DataNode lables = new DataNode(list.get(1));
-        try {
-            String chartfileName = pathList.get(4)+"\\"+fileName+".png";
-            ScatterPlot plot = new ScatterPlot(list.get(0), list.get(1),chartfileName);
-        }catch(Exception ex){
-            ex.getStackTrace();
-        }
-        PearsonCorrelationScore score = new PearsonCorrelationScore(outPut,lables);
-        pearsonScore =score.getPearsonCorrelationScore();
-        System.out.println("Pearson Correlation Coefficient is:"+score.getPearsonCorrelationScore());;
+       //String chartfileName = pathList.get(4)+"\\"+fileName;
+       // Estimate.correlationAndScatter(annRegList.get(0),annRegList.get(1),chartfileName);
     }
 
     public void SQMultilyLayerModel(int epoch,double rate,int hiddenLayer1,int hiddenLayer2,List<String> pathList){
@@ -119,19 +97,14 @@ public class Main {
 
         double threshold = 0.8;
 
-        String trainTypes = "SQ";  // 训练内容：序列、侧链长度、两者结合
-
-        List<double[]> list = new ArrayList<>();
-
-
-
         /*
         * 获取训练集和测试集
         * */
         String traiFfileName = pathList.get(0);
         String testFileName = pathList.get(1);
-        GetDataSetIterator trainingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
-        GetDataSetIterator testingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
+        String fileType = "SQ";
+         trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+         testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
             testingdataIterator.readDataFromFile(testFileName);
@@ -140,9 +113,6 @@ public class Main {
             ioEx.getStackTrace();
         }
 
-
-
-
         ///log.info("Build model....");
         //创建神经网络
         CreateNeuralNet netconfig = new CreateNeuralNet(firstLayerInput,hiddenLayer1,hiddenLayer2,outLayerOutput);
@@ -150,32 +120,20 @@ public class Main {
 
         //log.info("TrainAndTest model....");
 
-
-
-
-
-
-
         //使用k-折交叉验证训练模型
         trainAndTest = new TrainAndTest(threshold);
         trainAndTest.kFoldTrain(network1,trainingdataIterator,10,epoch);
         //测试
-        list =  trainAndTest.test(network1,testingdataIterator);
-
-
-
-
-
-
+        annRegList =  trainAndTest.test(network1,testingdataIterator);
 
         //保存和加载模型
 
         String fileName = String.valueOf(hiddenLayer1)+"_"+String.valueOf(hiddenLayer2)+"_"+String.valueOf(epoch)+"_"+String.valueOf(rate);
 
-        String filePath  = pathList.get(2)+"\\"+fileName+".txt";
+        //String filePath  = pathList.get(2)+"\\"+fileName+".txt";
         try{
-            trainAndTest.writeToFile(testingdataIterator,list,filePath); //将预测结果和真实值写入文件
-            SaveAndLoadModel.saveModel(network1,pathList.get(3)+"\\"+fileName+".zip");
+            //trainAndTest.writeToFile(testingdataIterator,annRegList,filePath); //将预测结果和真实值写入文件
+            SaveAndLoadModel.saveModel(network1,pathList.get(2)+"\\"+fileName+".zip");
 
         }catch (IOException ex){
             ex.getStackTrace();
@@ -184,17 +142,8 @@ public class Main {
 
 
         //计算皮尔逊相关系数
-        DataNode outPut = new DataNode(list.get(0));
-        DataNode lables = new DataNode(list.get(1));
-        try {
-            String chartfileName = pathList.get(4)+"\\"+fileName+".png";
-            ScatterPlot plot = new ScatterPlot(list.get(0), list.get(1),chartfileName);
-        }catch(Exception ex){
-            ex.getStackTrace();
-        }
-        PearsonCorrelationScore score = new PearsonCorrelationScore(outPut,lables);
-        pearsonScore =score.getPearsonCorrelationScore();
-        System.out.println("Pearson Correlation Coefficient is:"+score.getPearsonCorrelationScore());;
+       // String chartfileName = pathList.get(4)+"\\"+fileName;
+        //Estimate.correlationAndScatter(annRegList.get(0),annRegList.get(1),chartfileName);
     }
 
 
@@ -207,19 +156,15 @@ public class Main {
 
         double threshold = 0.8;
 
-        String trainTypes = "SQL";  // 训练内容：序列、侧链长度、两者结合
-
-        List<double[]> list = new ArrayList<>();
-
-
 
         /*
         * 获取训练集和测试集
         * */
         String traiFfileName = pathList.get(0);
         String testFileName = pathList.get(1);
-        GetDataSetIterator trainingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
-        GetDataSetIterator testingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
+        String fileType = "SQL";
+       trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+        testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
             testingdataIterator.readDataFromFile(testFileName);
@@ -227,9 +172,6 @@ public class Main {
         }catch(IOException ioEx){
             ioEx.getStackTrace();
         }
-
-
-
 
         //log.info("Build model....");
         //创建神经网络
@@ -239,50 +181,30 @@ public class Main {
         //log.info("TrainAndTest model....");
 
 
-
-
-
-
-
         //使用k-折交叉验证训练模型
         trainAndTest = new TrainAndTest(threshold);
         trainAndTest.kFoldTrain(network1,trainingdataIterator,10,epoch);
         //测试
-        list =  trainAndTest.test(network1,testingdataIterator);
-
-
-
-
-
+        annRegList =  trainAndTest.test(network1,testingdataIterator);
 
 
         //保存和加载模型
 
         String fileName = String.valueOf(hiddenLayer1)+"_"+String.valueOf("0")+"_"+String.valueOf(epoch)+"_"+String.valueOf(rate);
 
-        String filePath  = pathList.get(2)+"\\"+fileName+".txt";
+        //String filePath  = pathList.get(2)+"\\"+fileName+".txt";
         try{
-            trainAndTest.writeToFile(testingdataIterator,list,filePath); //将预测结果和真实值写入文件
-            SaveAndLoadModel.saveModel(network1,pathList.get(3)+"\\"+fileName+".zip");
+            ///trainAndTest.writeToFile(testingdataIterator,annRegList,filePath); //将预测结果和真实值写入文件
+            SaveAndLoadModel.saveModel(network1,pathList.get(2)+"\\"+fileName+".zip");
 
         }catch (IOException ex){
             ex.getStackTrace();
         }
 
 
-
         //计算皮尔逊相关系数
-        DataNode outPut = new DataNode(list.get(0));
-        DataNode lables = new DataNode(list.get(1));
-        try {
-            String chartfileName = pathList.get(4)+"\\"+fileName+".png";
-            ScatterPlot plot = new ScatterPlot(list.get(0), list.get(1),chartfileName);
-        }catch(Exception ex){
-            ex.getStackTrace();
-        }
-        PearsonCorrelationScore score = new PearsonCorrelationScore(outPut,lables);
-        pearsonScore =score.getPearsonCorrelationScore();
-        System.out.println("Pearson Correlation Coefficient is:"+score.getPearsonCorrelationScore());;
+        //String chartfileName = pathList.get(4)+"\\"+fileName;
+        //Estimate.correlationAndScatter(annRegList.get(0),annRegList.get(1),chartfileName);
     }
 
     public void SQLMultilyLayerModel(int epoch,double rate,int hiddenLayer1,int hiddenLayer2,List<String> pathList){
@@ -294,10 +216,6 @@ public class Main {
 
         double threshold = 0.8;
 
-        String trainTypes = "SQL";  // 训练内容：序列、侧链长度、两者结合
-
-        List<double[]> list = new ArrayList<>();
-
 
 
         /*
@@ -305,8 +223,9 @@ public class Main {
         * */
         String traiFfileName = pathList.get(0);
         String testFileName = pathList.get(1);
-        GetDataSetIterator trainingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
-        GetDataSetIterator testingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
+        String fileType = "SQL";
+         trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+         testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
             testingdataIterator.readDataFromFile(testFileName);
@@ -316,8 +235,6 @@ public class Main {
         }
 
 
-
-
         //log.info("Build model....");
         //创建神经网络
         CreateNeuralNet netconfig = new CreateNeuralNet(firstLayerInput,hiddenLayer1,hiddenLayer2,outLayerOutput);
@@ -325,32 +242,21 @@ public class Main {
 
         //log.info("TrainAndTest model....");
 
-
-
-
-
-
-
         //使用k-折交叉验证训练模型
         trainAndTest = new TrainAndTest(threshold);
         trainAndTest.kFoldTrain(network1,trainingdataIterator,10,epoch);
         //测试
-        list =  trainAndTest.test(network1,testingdataIterator);
-
-
-
-
-
+        annRegList =  trainAndTest.test(network1,testingdataIterator);
 
 
         //保存和加载模型
 
         String fileName = String.valueOf(hiddenLayer1)+"_"+String.valueOf(hiddenLayer2)+"_"+String.valueOf(epoch)+"_"+String.valueOf(rate);
 
-        String filePath  = pathList.get(2)+"\\"+fileName+".txt";
+        //String filePath  = pathList.get(2)+"\\"+fileName+".txt";
         try{
-            trainAndTest.writeToFile(testingdataIterator,list,filePath); //将预测结果和真实值写入文件
-            SaveAndLoadModel.saveModel(network1,pathList.get(3)+"\\"+fileName+".zip");
+            //trainAndTest.writeToFile(testingdataIterator,annRegList,filePath); //将预测结果和真实值写入文件
+            SaveAndLoadModel.saveModel(network1,pathList.get(2)+"\\"+fileName+".zip");
 
         }catch (IOException ex){
             ex.getStackTrace();
@@ -359,17 +265,8 @@ public class Main {
 
 
         //计算皮尔逊相关系数
-        DataNode outPut = new DataNode(list.get(0));
-        DataNode lables = new DataNode(list.get(1));
-        try {
-            String chartfileName = pathList.get(4)+"\\"+fileName+".png";
-            ScatterPlot plot = new ScatterPlot(list.get(0), list.get(1),chartfileName);
-        }catch(Exception ex){
-            ex.getStackTrace();
-        }
-        PearsonCorrelationScore score = new PearsonCorrelationScore(outPut,lables);
-        pearsonScore =score.getPearsonCorrelationScore();
-        System.out.println("Pearson Correlation Coefficient is:"+score.getPearsonCorrelationScore());;
+        //String chartfileName = pathList.get(4)+"\\"+fileName;
+        //Estimate.correlationAndScatter(annRegList.get(0),annRegList.get(1),chartfileName);
     }
     public void SQLTSingleLayerModel(int epoch,double rate,int hiddenLayer1,List<String> pathList){
         int batchSize = 50;         // 批次大小
@@ -380,19 +277,14 @@ public class Main {
 
         double threshold = 0.8;
 
-        String trainTypes = "SQLT";  // 训练内容：序列、侧链长度、两者结合
-
-        List<double[]> list = new ArrayList<>();
-
-
-
         /*
         * 获取训练集和测试集
         * */
         String traiFfileName = pathList.get(0);
         String testFileName = pathList.get(1);
-        GetDataSetIterator trainingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
-        GetDataSetIterator testingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
+        String fileType = "SQLT";
+        trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+        testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
             testingdataIterator.readDataFromFile(testFileName);
@@ -400,9 +292,6 @@ public class Main {
         }catch(IOException ioEx){
             ioEx.getStackTrace();
         }
-
-
-
 
         //log.info("Build model....");
         //创建神经网络
@@ -412,50 +301,30 @@ public class Main {
         //log.info("TrainAndTest model....");
 
 
-
-
-
-
-
         //使用k-折交叉验证训练模型
         trainAndTest = new TrainAndTest(threshold);
         trainAndTest.kFoldTrain(network1,trainingdataIterator,10,epoch);
         //测试
-        list =  trainAndTest.test(network1,testingdataIterator);
-
-
-
-
-
+        annRegList =  trainAndTest.test(network1,testingdataIterator);
 
 
         //保存和加载模型
 
         String fileName = String.valueOf(hiddenLayer1)+"_"+String.valueOf("0")+"_"+String.valueOf(epoch)+"_"+String.valueOf(rate);
 
-        String filePath  = pathList.get(2)+"\\"+fileName+".txt";
+        //String filePath  = pathList.get(2)+"\\"+fileName+".txt";
         try{
-            trainAndTest.writeToFile(testingdataIterator,list,filePath); //将预测结果和真实值写入文件
-            SaveAndLoadModel.saveModel(network1,pathList.get(3)+"\\"+fileName+".zip");
+            //trainAndTest.writeToFile(testingdataIterator,annRegList,filePath); //将预测结果和真实值写入文件
+            SaveAndLoadModel.saveModel(network1,pathList.get(2)+"\\"+fileName+".zip");
 
         }catch (IOException ex){
             ex.getStackTrace();
         }
 
 
-
         //计算皮尔逊相关系数
-        DataNode outPut = new DataNode(list.get(0));
-        DataNode lables = new DataNode(list.get(1));
-        try {
-            String chartfileName = pathList.get(4)+"\\"+fileName+".png";
-            ScatterPlot plot = new ScatterPlot(list.get(0), list.get(1),chartfileName);
-        }catch(Exception ex){
-            ex.getStackTrace();
-        }
-        PearsonCorrelationScore score = new PearsonCorrelationScore(outPut,lables);
-        pearsonScore =score.getPearsonCorrelationScore();
-        System.out.println("Pearson Correlation Coefficient is:"+score.getPearsonCorrelationScore());;
+        //String chartfileName = pathList.get(4)+"\\"+fileName;
+        //Estimate.correlationAndScatter(annRegList.get(0),annRegList.get(1),chartfileName);
     }
 
     public void SQLTMultilyLayerModel(int epoch,double rate,int hiddenLayer1,int hiddenLayer2,List<String> pathList){
@@ -467,10 +336,6 @@ public class Main {
 
         double threshold = 0.8;
 
-        String trainTypes = "SQLT";  // 训练内容：序列、侧链长度、两者结合
-
-        List<double[]> list = new ArrayList<>();
-
 
 
         /*
@@ -478,8 +343,9 @@ public class Main {
         * */
         String traiFfileName = pathList.get(0);
         String testFileName = pathList.get(1);
-        GetDataSetIterator trainingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
-        GetDataSetIterator testingdataIterator = new GetDataSetIterator(batchSize,trainTypes);
+        String fileType = "SQLT";
+         trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+         testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
             testingdataIterator.readDataFromFile(testFileName);
@@ -487,8 +353,6 @@ public class Main {
         }catch(IOException ioEx){
             ioEx.getStackTrace();
         }
-
-
 
 
         //log.info("Build model....");
@@ -500,19 +364,11 @@ public class Main {
 
 
 
-
-
-
-
         //使用k-折交叉验证训练模型
         trainAndTest = new TrainAndTest(threshold);
         trainAndTest.kFoldTrain(network1,trainingdataIterator,10,epoch);
         //测试
-        list =  trainAndTest.test(network1,testingdataIterator);
-
-
-
-
+        annRegList =  trainAndTest.test(network1,testingdataIterator);
 
 
 
@@ -520,10 +376,10 @@ public class Main {
 
         String fileName = String.valueOf(hiddenLayer1)+"_"+String.valueOf(hiddenLayer2)+"_"+String.valueOf(epoch)+"_"+String.valueOf(rate);
 
-        String filePath  = pathList.get(2)+"\\"+fileName+".txt";
+        //String filePath  = pathList.get(2)+"\\"+fileName+".txt";
         try{
-            trainAndTest.writeToFile(testingdataIterator,list,filePath); //将预测结果和真实值写入文件
-            SaveAndLoadModel.saveModel(network1,pathList.get(3)+"\\"+fileName+".zip");
+            //trainAndTest.writeToFile(testingdataIterator,annRegList,filePath); //将预测结果和真实值写入文件
+            SaveAndLoadModel.saveModel(network1,pathList.get(2)+"\\"+fileName+".zip");
 
         }catch (IOException ex){
             ex.getStackTrace();
@@ -532,20 +388,11 @@ public class Main {
 
 
         //计算皮尔逊相关系数
-        DataNode outPut = new DataNode(list.get(0));
-        DataNode lables = new DataNode(list.get(1));
-        try {
-            String chartfileName = pathList.get(4)+"\\"+fileName+".png";
-            ScatterPlot plot = new ScatterPlot(list.get(0), list.get(1),chartfileName);
-        }catch(Exception ex){
-            ex.getStackTrace();
-        }
-        PearsonCorrelationScore score = new PearsonCorrelationScore(outPut,lables);
-        pearsonScore =score.getPearsonCorrelationScore();
-        System.out.println("Pearson Correlation Coefficient is:"+score.getPearsonCorrelationScore());;
+        //String chartfileName = pathList.get(4)+"\\"+fileName;
+        //Estimate.correlationAndScatter(annRegList.get(0),annRegList.get(1),chartfileName);
     }
 
-    /*public static void main(String [] agrs){
+    /*public static void annMain(String [] agrs){
 
 
         int batchSize = 50;         // 批次大小

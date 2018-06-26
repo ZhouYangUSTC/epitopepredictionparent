@@ -1,4 +1,4 @@
-package annregression.pearson;
+package annregression.estimate;
 
 
 import org.jfree.chart.ChartFactory;

@@ -24,7 +24,7 @@ public class TrainingForm {
     private JTextField falseRateTextField;
     private JTextField missRateTextField;
     private JTextField messageTextField;
-    public Main main = new Main();
+    public AnnMain annMain = new AnnMain();
 
     public void initText(){
         MSETextField.setText("");
@@ -36,10 +36,10 @@ public class TrainingForm {
 
     }
     public void messageText(){
-        MSETextField.setText(main.trainAndTest.regEvaluationStats);
-        PearsonTextField.setText(main.pearsonScore.toString());
-        falseRateTextField.setText(main.trainAndTest.errRate.toString());
-        missRateTextField.setText(main.trainAndTest.missRate.toString());
+        MSETextField.setText(annMain.trainAndTest.regEvaluationStats);
+        PearsonTextField.setText(annMain.pearsonScore.toString());
+        falseRateTextField.setText(annMain.trainAndTest.errRate.toString());
+        missRateTextField.setText(annMain.trainAndTest.missRate.toString());
     }
     public TrainingForm() {
 
@@ -70,34 +70,34 @@ public class TrainingForm {
                     filePathList.add(scatterSavePathTextField.getText());
                     if(comboBox1.getSelectedItem().equals("SQSinglelayer")){
 
-                        main.SQSingleLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),filePathList);
+                        annMain.SQSingleLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),filePathList);
                         messageText();
                     }
                     else if(comboBox1.getSelectedItem().equals("SQMultilayer")){
 
-                        main.SQMultilyLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),Integer.valueOf(hiddenLayer2TextField.getText()),filePathList);
+                        annMain.SQMultilyLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),Integer.valueOf(hiddenLayer2TextField.getText()),filePathList);
                         messageText();
 
                     }
                     else if(comboBox1.getSelectedItem().equals("SQLSinglelayer")){
 
-                        main.SQLSingleLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),filePathList);
+                        annMain.SQLSingleLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),filePathList);
                         messageText();
                     }
                     else if(comboBox1.getSelectedItem().equals("SQLMultilayer")){
 
-                        main.SQLMultilyLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),Integer.valueOf(hiddenLayer2TextField.getText()),filePathList);
+                        annMain.SQLMultilyLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),Integer.valueOf(hiddenLayer2TextField.getText()),filePathList);
                         messageText();
                     }
                     else if(comboBox1.getSelectedItem().equals("SQLTSinglelayer"))
                     {
 
-                        main.SQLTSingleLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),filePathList);
+                        annMain.SQLTSingleLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),filePathList);
                         messageText();
                     }
                     else if(comboBox1.getSelectedItem().equals("SQLTMultilayer")){
 
-                        main.SQLMultilyLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),Integer.valueOf(hiddenLayer2TextField.getText()),filePathList);
+                        annMain.SQLTMultilyLayerModel(Integer.valueOf(epochTextField.getText()),Double.valueOf(learningRateTextField.getText()),  Integer.valueOf(hiddenLayer1TextField.getText()),Integer.valueOf(hiddenLayer2TextField.getText()),filePathList);
                         messageText();
                     }
                 }

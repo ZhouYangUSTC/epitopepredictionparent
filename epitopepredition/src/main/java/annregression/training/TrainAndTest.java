@@ -1,6 +1,7 @@
 package annregression.training;
 
 import annregression.dataprocessing.GetDataSetIterator;
+import annregression.estimate.Estimate;
 import org.deeplearning4j.eval.RegressionEvaluation;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -86,7 +87,7 @@ public class TrainAndTest {
         System.out.println();
 
         //System.out.println(test.getLabels().reshape(1,test.getLabels().rows()));
-        erorAndMiss(test.getLabels(),output,threshold);
+        Estimate.erorAndMiss(test.getLabels(),output,threshold);
         String []status = regEvaluation.stats().split("\n");
 
         regEvaluationStats = status[1].trim().substring(40,51);
@@ -108,7 +109,7 @@ public class TrainAndTest {
             file.createNewFile();
         }
 
-        FileWriter out = new FileWriter(file,true);
+        FileWriter out = new FileWriter(file);
         out.write("\toutput\t\t\tlables\r\n");
         for (int i = 0; i < list.get(0).length; i++) {
             out.write(dataSet.dataList.get(i).getSequence()+"\t"+list.get(0)[i]+"\t"+list.get(1)[i]+"\r\n");
@@ -120,31 +121,5 @@ public class TrainAndTest {
 
 
 
-    public void erorAndMiss(INDArray input,INDArray output,double threshold){
-        double err = 0.0;
-        double miss = 0.0;
-        double accurate = 0.0;
-        int length = input.length();
 
-
-            for (int i = 0; i < length; i++) {
-                if(input.getDouble(i)>= threshold && output.getDouble(i) < threshold)
-                {
-                    miss++;
-                }
-                else if(input.getDouble(i)<= threshold && output.getDouble(i) >=threshold)
-                {
-                    err++;
-                }
-                else if(input.getDouble(i)>= threshold && output.getDouble(i) >=threshold)
-                {
-                    accurate++;
-                }
-
-            }
-            errRate = err/(err+accurate);
-            missRate = miss/(miss+accurate);
-           System.out.println("Prediction errorRate is:"+errRate+", and missRate is:"+missRate);
-
-    }
 }

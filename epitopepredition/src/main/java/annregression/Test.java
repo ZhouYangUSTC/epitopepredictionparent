@@ -2,9 +2,9 @@ package annregression;
 
 
 import annregression.dataprocessing.GetDataSetIterator;
-import annregression.pearson.DataNode;
-import annregression.pearson.PearsonCorrelationScore;
-import annregression.pearson.ScatterPlot;
+import annregression.estimate.DataNode;
+import annregression.estimate.PearsonCorrelationScore;
+import annregression.estimate.ScatterPlot;
 import annregression.training.SaveAndLoadModel;
 import annregression.training.TrainAndTest;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -17,7 +17,7 @@ import java.util.List;
 
 
 public class Test {
-    private static Logger log = LoggerFactory.getLogger(Main.class);
+    private static Logger log = LoggerFactory.getLogger(AnnMain.class);
 
     public static void main(String [] agrs){
 
