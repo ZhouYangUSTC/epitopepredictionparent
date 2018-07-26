@@ -8,8 +8,10 @@ package peptidelibrary;/*
 
 import peptidelibrary.genebank.BankModel;
 import peptidelibrary.sqloperate.SqlOperate;
+import peptidelibrary.transcript.MutationInformation;
 import peptidelibrary.transcript.Transcript;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +29,15 @@ public class CreatePeptideLibrary {
 
 
     public static void main(String[] sgrs){
+
+
+
        try
        {
+           long startTime=System.currentTimeMillis();   //获取开始时间
            peptideLibary();
+           long endTime=System.currentTimeMillis(); //获取结束时间
+           System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
        }catch(Exception ex){
            System.out.println(ex.getMessage());
        }
@@ -42,10 +50,10 @@ public class CreatePeptideLibrary {
      * @auther: Yang Zhou
      * @date: 2018/7/22 14:55
      */
-    public static List<PeptideGroup> peptideLibary() throws SQLException,ClassNotFoundException{
+    public static List<PeptideGroup> peptideLibary() throws SQLException,ClassNotFoundException,IOException{
         SqlOperate sqlOperate = new SqlOperate();
-        List<Transcript> trsList = sqlOperate.queryTranscript("select * from transcript");
-
+        //List<Transcript> trsList = sqlOperate.queryTranscript("select * from transcript");
+        List<Transcript> trsList = MutationInformation.readTranscriptFromFile("E:\\抗原预测\\表位预测\\RNATEST\\01.csv");
         BankModel bank = null;
         PeptideGroup group = null;
         List<PeptideGroup> list = new ArrayList<>();

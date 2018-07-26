@@ -54,8 +54,6 @@ public class CodonTable {
 
 
     }
-    public static void main(String[] agrs){
-        Map<String,String> map = new CodonTable().map;
-    }
+
 }
 
