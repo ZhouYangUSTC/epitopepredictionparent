@@ -15,6 +15,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.wisdom-framework:mysql-connector-java:5.1.34_1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.felix:org.apache.felix.ipojo.annotations:1.12.1" level="project" />
+    <orderEntry type="library" name="Maven: org.wisdom-framework:abstract-jdbc-driver:0.5" level="project" />
     <orderEntry type="library" name="Maven: org.nd4j:nd4j-native-platform:1.0.0-alpha" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco.javacpp-presets:openblas-platform:0.2.20-1.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco.javacpp-presets:openblas:0.2.20-1.4.1" level="project" />
