@@ -6,6 +6,7 @@ import annregression.training.CreateNeuralNet;
 import annregression.training.SaveAndLoadModel;
 import annregression.training.TrainAndTest;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.nd4j.linalg.dataset.DataSet;
 
 import java.io.IOException;
 import java.util.List;
@@ -225,6 +226,8 @@ public class AnnMain {
         String testFileName = pathList.get(1);
         String fileType = "SQL";
          trainingdataIterator = new GetDataSetIterator(batchSize,fileType);
+         DataSet dataSet = new DataSet();
+
          testingdataIterator = new GetDataSetIterator(batchSize,fileType);
         try{
             trainingdataIterator.readDataFromFile(traiFfileName);
